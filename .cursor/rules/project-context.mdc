@@ -1,0 +1,235 @@
+---
+alwaysApply: true
+---
+
+Good.
+Here is your **complete structured context prompt for Cursor**.
+
+Copy everything below into Cursor as your project context.
+
+---
+
+# 🧠 PROJECT CONTEXT — Micro-Frontend Architecture (Learning Platform)
+
+## Objective
+
+Build a minimal but enterprise-correct Micro-Frontend architecture to understand:
+
+- Runtime composition (Module Federation)
+- Independent deployments
+- Cross-app communication
+- Message contracts
+- Targeted event routing
+- Clean separation of concerns
+- Upgrade path to WebSockets later
+
+UI is intentionally simple (bulb on/off).
+Architecture correctness is the priority.
+
+---
+
+# 🏗 High-Level Architecture
+
+## Deployment Units (Independent)
+
+1. host-shell
+
+   - FastAPI backend
+   - Plain HTML + JS frontend
+   - Loads MFEs at runtime
+   - Owns mediator and state
+   - Owns authentication
+
+2. mfe1
+
+   - React + Vite
+   - Exposed via Module Federation
+   - Exposes mount() and unmount()
+
+3. mfe2
+
+   - Same as mfe1
+
+All three are independently built and deployed.
+
+---
+
+# 🔌 Composition Model
+
+- Host dynamically loads:
+
+  - mfe1/remoteEntry.js
+  - mfe2/remoteEntry.js
+
+- No direct communication between MFEs.
+
+- All communication goes through Host Mediator.
+
+---
+
+# 🧭 Runtime Communication Model
+
+## Mediator (inside host)
+
+Responsibilities:
+
+- Own shared state
+- Validate events
+- Route events
+- Broadcast updates
+
+No MFE talks directly to another MFE.
+
+---
+
+# 📦 State Model
+
+```ts
+bulbStateByAppId = {
+  host: boolean,
+  mfe1: boolean,
+  mfe2: boolean
+}
+
+activeTargets: string[]
+```
+
+---
+
+# 📡 Event Contract (Versioned)
+
+All messages must include:
+
+- type
+- version
+- source
+- targets
+- correlationId
+
+---
+
+## 1️⃣ BULB_SET_REQUEST
+
+```ts
+{
+  type: "BULB_SET_REQUEST",
+  version: "1.0.0",
+  source: "mfe1" | "mfe2" | "host",
+  targets: string[],
+  payload: { state: boolean },
+  correlationId: string
+}
+```
+
+Flow:
+App → Mediator
+
+---
+
+## 2️⃣ BULB_STATE_CHANGED
+
+```ts
+{
+  type: "BULB_STATE_CHANGED",
+  version: "1.0.0",
+  targets: string[],
+  state: boolean,
+  correlationId: string
+}
+```
+
+Flow:
+Mediator → All apps
+Each app updates only if its appId is in targets.
+
+---
+
+## 3️⃣ TARGETS_SET_REQUEST
+
+```ts
+{
+  type: "TARGETS_SET_REQUEST",
+  source: "host" | "mfe1" | "mfe2",
+  targets: string[]
+}
+```
+
+---
+
+## 4️⃣ TARGETS_CHANGED
+
+```ts
+{
+  type: "TARGETS_CHANGED",
+  targets: string[]
+}
+```
+
+---
+
+# 🔐 Authentication Model
+
+- Host handles login.
+- FastAPI sets HttpOnly secure cookie.
+- MFEs never store tokens.
+- MFEs call `/api/*`.
+- Browser auto-attaches cookie.
+- Backend validates session.
+
+---
+
+# 🛑 Constraints
+
+- MFEs must not import each other.
+- MFEs must not own global state.
+- MFEs must expose:
+
+  - mount(container, props)
+  - unmount(container)
+
+- React must be shared as singleton in Module Federation.
+- All communication must use defined message contract.
+
+---
+
+# 🚀 Tooling
+
+- Vite
+- Module Federation plugin for Vite
+- React (for MFEs)
+- FastAPI (host backend)
+- Plain JS for host frontend
+
+---
+
+# 📈 Future Upgrade Path
+
+Replace frontend-only mediator with:
+
+Frontend Mediator
+
+- Backend WebSocket Hub
+
+Event contract remains unchanged.
+Only transport changes.
+
+---
+
+# 🎯 Learning Focus
+
+This project is not about UI.
+
+It is about:
+
+- Decoupling
+- Runtime composition
+- Clean contracts
+- Enterprise architecture discipline
+- Separation of deployment units
+- Scalability mindset
+
+---
+
+End of project context.
+
+---

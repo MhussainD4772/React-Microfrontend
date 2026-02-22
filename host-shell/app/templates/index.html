@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Host Shell</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Host Shell</h1>
+  </header>
+
+  <section class="host-ui">
+    <h2>Host UI</h2>
+    <div class="bulb-area">
+      <div id="bulb" class="bulb off" aria-label="Bulb state"></div>
+      <button type="button" id="toggle-bulb">Toggle Bulb (Host)</button>
+    </div>
+  </section>
+
+  <section class="targets">
+    <h3>Targets</h3>
+    <div class="targets-list">
+      <label><input type="checkbox" name="target" value="host" checked /> host</label>
+      <label><input type="checkbox" name="target" value="mfe1" checked /> mfe1</label>
+      <label><input type="checkbox" name="target" value="mfe2" checked /> mfe2</label>
+    </div>
+  </section>
+
+  <section class="mfe-slots">
+    <div class="slot" id="mfe1-root" data-slot="mfe1">MFE1 slot</div>
+    <div class="slot" id="mfe2-root" data-slot="mfe2">MFE2 slot</div>
+  </section>
+
+  <script src="/static/host.js"></script>
+</body>
+</html>

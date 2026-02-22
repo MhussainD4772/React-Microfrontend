@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 1rem;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+header h1 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+.host-ui {
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.host-ui h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.bulb-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bulb {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.bulb.off {
+  background: #9ca3af;
+}
+
+.bulb.on {
+  background: #facc15;
+  box-shadow: 0 0 12px rgba(250, 204, 21, 0.6);
+}
+
+#toggle-bulb {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.targets {
+  margin-bottom: 1rem;
+}
+
+.targets h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.targets-list {
+  display: flex;
+  gap: 1rem;
+}
+
+.targets-list label {
+  cursor: pointer;
+}
+
+.mfe-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.slot {
+  min-height: 80px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fafafa;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.slot[id="mfe1-root"],
+.slot[id="mfe2-root"] {
+  /* Placeholder for future MFE mount */
+}

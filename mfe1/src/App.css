@@ -1,0 +1,44 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.mfe1 {
+  padding: 1rem;
+}
+
+.mfe1 h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.bulb-container {
+  margin: 1.5rem 0;
+}
+
+.bulb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.bulb.off {
+  background-color: #444;
+  border: 2px solid #666;
+}
+
+.bulb.on {
+  background-color: #f9e076;
+  border: 2px solid #e6c84a;
+  box-shadow: 0 0 24px rgba(249, 224, 118, 0.8);
+}
+
+.mfe1-meta {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #888;
+}
