@@ -32,6 +32,22 @@
     .host-toggle input:checked + .host-toggle__track { background: #6366f1; }
     .host-toggle input:checked + .host-toggle__track::after { transform: translateX(22px); }
     .host-toggle__label { font-size: 0.9375rem; font-weight: 500; color: #334155; }
+    .mfe-open-row { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+    .mfe-open-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn-open-mfe { flex: 1; min-width: 120px; padding: 0.6rem 1rem; font-size: 0.875rem; font-weight: 600; color: #4f46e5; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 0.5rem; cursor: pointer; }
+    .btn-open-mfe:hover { background: rgba(99,102,241,0.2); }
+    .modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
+    .modal.is-open { opacity: 1; visibility: visible; }
+    .modal[hidden] { display: none !important; }
+    .modal.is-open[hidden] { display: flex !important; }
+    .modal__backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.5); cursor: pointer; }
+    .modal__box { position: relative; width: 100%; max-width: 420px; max-height: 90vh; background: #fff; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: flex; flex-direction: column; overflow: hidden; }
+    .modal__header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; }
+    .modal__title { margin: 0; font-size: 1rem; font-weight: 700; color: #334155; }
+    .modal__close { width: 2rem; height: 2rem; font-size: 1.5rem; line-height: 1; color: #64748b; background: transparent; border: none; border-radius: 0.375rem; cursor: pointer; }
+    .modal__close:hover { color: #1e293b; background: #f1f5f9; }
+    .modal__body { padding: 1rem; overflow: auto; flex: 1; min-height: 200px; }
+    .mfe-slot { min-height: 180px; color: #64748b; font-size: 0.875rem; }
   </style>
 </head>
 <body>
@@ -65,8 +81,43 @@
           <span class="host-toggle__label">MFE2</span>
         </label>
       </div>
+      <div class="mfe-open-row">
+        <span class="targets-label">Open micro-frontends</span>
+        <div class="mfe-open-buttons">
+          <button type="button" class="btn-open-mfe" data-open="mfe1">Open MFE1</button>
+          <button type="button" class="btn-open-mfe" data-open="mfe2">Open MFE2</button>
+        </div>
+      </div>
     </section>
   </main>
+
+  <!-- Modal: MFE1 -->
+  <div class="modal" id="modal-mfe1" role="dialog" aria-modal="true" aria-labelledby="modal-mfe1-title" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__box">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modal-mfe1-title">MFE1</h3>
+        <button type="button" class="modal__close" data-close="mfe1" aria-label="Close">×</button>
+      </div>
+      <div class="modal__body">
+        <div id="mfe1-root" class="mfe-slot">Loading MFE1…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: MFE2 -->
+  <div class="modal" id="modal-mfe2" role="dialog" aria-modal="true" aria-labelledby="modal-mfe2-title" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__box">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modal-mfe2-title">MFE2</h3>
+        <button type="button" class="modal__close" data-close="mfe2" aria-label="Close">×</button>
+      </div>
+      <div class="modal__body">
+        <div id="mfe2-root" class="mfe-slot">Loading MFE2…</div>
+      </div>
+    </div>
+  </div>
 
   <script type="module" src="/static/host.js"></script>
 </body>
