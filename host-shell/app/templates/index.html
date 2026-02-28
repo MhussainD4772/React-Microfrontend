@@ -3,36 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Host Shell</title>
+  <title>Host Shell — Micro-Frontend Demo</title>
   <link rel="stylesheet" href="/static/styles.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; padding: 1.5rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 40%, #fef3c7 100%); color: #1e293b; display: flex; flex-direction: column; align-items: center; }
+    header { text-align: center; margin-bottom: 1.5rem; width: 100%; max-width: 28rem; }
+    header h1 { margin: 0 0 0.25rem; font-size: 1.75rem; font-weight: 800; background: linear-gradient(90deg, #4f46e5, #d97706); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    header p { margin: 0; font-size: 0.875rem; color: #64748b; }
+    main { width: 100%; max-width: 28rem; margin: 0 auto; }
+    .app-card { width: 100%; max-width: 28rem; margin: 0 auto; background: rgba(255,255,255,0.95); border: 1px solid rgba(226,232,240,0.9); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 10px 20px -5px rgba(0,0,0,0.06); }
+    .app-card:hover { box-shadow: 0 10px 25px -5px rgba(99,102,241,0.15); transform: translateY(-2px); }
+    .app-card h2 { margin: 0 0 1rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #4f46e5; }
+    .bulb-area { display: flex; justify-content: center; margin-bottom: 1.25rem; }
+    .bulb.bulb--large { width: 5rem; height: 5rem; border-radius: 50%; border: 4px solid #94a3b8; }
+    .bulb.off { background: #94a3b8; border-color: #64748b; box-shadow: none; }
+    .bulb.on { background: #f59e0b; border-color: #d97706; box-shadow: 0 0 28px rgba(245,158,11,0.6); }
+    .btn-toggle { display: block; width: 100%; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 1rem; font-weight: 600; color: #fff; background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; border-radius: 0.75rem; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-toggle:hover { background: linear-gradient(135deg, #4f46e5, #4338ca); }
+    .btn-toggle:active { transform: scale(0.98); }
+    .targets-label { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; margin-bottom: 0.75rem; }
+    .targets-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .host-toggle { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; cursor: pointer; border-radius: 0.5rem; }
+    .host-toggle:hover { background: rgba(241,245,249,0.8); }
+    .host-toggle input { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    .host-toggle__track { display: block; width: 48px; height: 26px; min-width: 48px; min-height: 26px; border-radius: 13px; background: #cbd5e1; position: relative; flex-shrink: 0; }
+    .host-toggle__track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.25s; }
+    .host-toggle input:checked + .host-toggle__track { background: #6366f1; }
+    .host-toggle input:checked + .host-toggle__track::after { transform: translateX(22px); }
+    .host-toggle__label { font-size: 0.9375rem; font-weight: 500; color: #334155; }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Host Shell</h1>
+    <h1>Micro-Frontend Demo</h1>
+    <p>Control bulbs across Host and MFEs</p>
   </header>
 
-  <section class="host-ui">
-    <h2>Host UI</h2>
-    <div class="bulb-area">
-      <div id="bulb" class="bulb off" aria-label="Bulb state"></div>
-      <button type="button" id="toggle-bulb">Toggle Bulb (Host)</button>
-    </div>
-  </section>
+  <main>
+    <section class="app-card app-card--host">
+      <h2>HOST</h2>
+      <div class="bulb-area">
+        <div id="bulb" class="bulb bulb--large off" aria-label="Host bulb state"></div>
+      </div>
+      <button type="button" id="toggle-bulb" class="btn-toggle">Toggle Targets</button>
+      <span class="targets-label">Targets — control these bulbs</span>
+      <div class="targets-list">
+        <label class="host-toggle">
+          <input type="checkbox" name="target" value="host" checked />
+          <span class="host-toggle__track"></span>
+          <span class="host-toggle__label">Host</span>
+        </label>
+        <label class="host-toggle">
+          <input type="checkbox" name="target" value="mfe1" />
+          <span class="host-toggle__track"></span>
+          <span class="host-toggle__label">MFE1</span>
+        </label>
+        <label class="host-toggle">
+          <input type="checkbox" name="target" value="mfe2" />
+          <span class="host-toggle__track"></span>
+          <span class="host-toggle__label">MFE2</span>
+        </label>
+      </div>
+    </section>
+  </main>
 
-  <section class="targets">
-    <h3>Targets</h3>
-    <div class="targets-list">
-      <label><input type="checkbox" name="target" value="host" checked /> host</label>
-      <label><input type="checkbox" name="target" value="mfe1" checked /> mfe1</label>
-      <label><input type="checkbox" name="target" value="mfe2" checked /> mfe2</label>
-    </div>
-  </section>
-
-  <section class="mfe-slots">
-    <div class="slot" id="mfe1-root" data-slot="mfe1">MFE1 slot</div>
-    <div class="slot" id="mfe2-root" data-slot="mfe2">MFE2 slot</div>
-  </section>
-
-  <script src="/static/host.js"></script>
+  <script type="module" src="/static/host.js"></script>
 </body>
 </html>

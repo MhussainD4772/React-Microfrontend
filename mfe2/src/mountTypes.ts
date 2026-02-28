@@ -1,7 +1,8 @@
 export type MountProps = {
   appId: "mfe2";
-  version: "1.0.0";
+  version: string;
   initialState?: { bulbOn?: boolean };
+  initialTargets?: string[];
   eventBus?: {
     emit: (msg: unknown) => void;
     on: (type: string, handler: (msg: unknown) => void) => () => void;
