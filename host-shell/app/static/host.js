@@ -1,5 +1,5 @@
 /**
- * Host Shell — Plain HTML + JS. No React, no Vite.
+ * Host Shell — Plain HTML + JS.
  * Loads React MFEs at runtime via dynamic import(remoteEntry.js) and mount().
  */
 
@@ -56,10 +56,13 @@ const Mediator = {
   handleBulbSetRequest(message) {
     const { targets, payload } = message;
     const state = !!payload?.state;
-    targets.forEach((id) => {
-      if (this.bulbStateByAppId.hasOwnProperty(id)) this.bulbStateByAppId[id] = state;
+    const validTargets = Array.isArray(targets)
+      ? targets.filter((id) => this.bulbStateByAppId.hasOwnProperty(id))
+      : [];
+    validTargets.forEach((id) => {
+      this.bulbStateByAppId[id] = state;
     });
-    this.broadcastBulbStateChanged(targets, state, message.correlationId);
+    this.broadcastBulbStateChanged(validTargets, state, message.correlationId);
   },
 
   broadcastBulbStateChanged(targets, state, correlationId) {
@@ -144,10 +147,45 @@ async function init() {
     });
   });
 
-  // Initial render: host bulb starts OFF (Mediator.bulbStateByAppId.host is false)
+  // Initial render: host bulb starts OFF
   Mediator.applyBulbStateToHostUI();
 
-  // MFEs are deployed as separate apps; not loaded or embedded in the host page.
+  // ----- Modal: open/close and lazy-load MFEs -----
+  const loadedMfes = new Set();
+
+  function openModal(name) {
+    const modal = document.getElementById(`modal-${name}`);
+    if (!modal) return;
+    modal.removeAttribute('hidden');
+    modal.classList.add('is-open');
+    if (!loadedMfes.has(name)) {
+      loadedMfes.add(name);
+      const remotes = { mfe1: REMOTES.mfe1, mfe2: REMOTES.mfe2 };
+      loadRemote(name, remotes[name], `${name}-root`);
+    }
+  }
+
+  function closeModal(name) {
+    const modal = document.getElementById(`modal-${name}`);
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('hidden', '');
+  }
+
+  document.querySelectorAll('.btn-open-mfe').forEach((btn) => {
+    btn.addEventListener('click', () => openModal(btn.dataset.open));
+  });
+
+  document.querySelectorAll('.modal__close').forEach((btn) => {
+    btn.addEventListener('click', () => closeModal(btn.dataset.close));
+  });
+
+  document.querySelectorAll('.modal__backdrop').forEach((backdrop) => {
+    backdrop.addEventListener('click', () => {
+      const modal = backdrop.closest('.modal');
+      if (modal) closeModal(modal.id.replace('modal-', ''));
+    });
+  });
 }
 
 if (document.readyState === 'loading') {
