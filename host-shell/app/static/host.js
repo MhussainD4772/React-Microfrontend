@@ -30,7 +30,7 @@ const HostEventBus = {
 };
 
 const Mediator = {
-  bulbStateByAppId: { host: false, mfe1: false, mfe2: false },
+  bulbStateByAppId: { host: false, mfe1: false, mfe2: false, mfe3: false },
 
   getTargetsFromUI() {
     const checkboxes = document.querySelectorAll('.app-card--host input[name="target"]:checked');
@@ -84,12 +84,27 @@ const REMOTES = {
   mfe1: 'http://localhost:5173/remoteEntry.js',
   mfe2: 'http://localhost:5174/remoteEntry.js',
 };
+// MFE3 is a Web Component: load script, then create <mfe3-bulb> (no Module Federation).
+const MFE3_SCRIPT = 'http://localhost:5175/src/main.js';
 
 async function loadRemote(name, entryUrl, containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
 
   try {
+    // MFE3: Web Component — load script then create <mfe3-bulb> and set props (no mount()).
+    if (name === 'mfe3') {
+      await loadScript(MFE3_SCRIPT);
+      await customElements.whenDefined('mfe3-bulb');
+      el.innerHTML = '';
+      const wc = document.createElement('mfe3-bulb');
+      wc.appId = 'mfe3';
+      wc.initialState = { bulbOn: !!Mediator.bulbStateByAppId.mfe3 };
+      wc.initialTargets = ['mfe3'];
+      wc.eventBus = HostEventBus.getEventBusForMfe();
+      el.appendChild(wc);
+      return;
+    }
     const container = await import( entryUrl);
     if (typeof container.get !== 'function') {
       el.innerHTML = `<p class="slot-error">${name}: invalid remote (no get)</p>`;
@@ -118,6 +133,21 @@ async function loadRemote(name, entryUrl, containerId) {
     el.innerHTML = `<p class="slot-error">${name}: ${err?.message ?? String(err)}</p>`;
     console.error(`Host: failed to load ${name}`, err);
   }
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = src;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+    document.head.appendChild(script);
+  });
 }
 
 // ——— Host UI wiring ———
@@ -160,8 +190,9 @@ async function init() {
     modal.classList.add('is-open');
     if (!loadedMfes.has(name)) {
       loadedMfes.add(name);
-      const remotes = { mfe1: REMOTES.mfe1, mfe2: REMOTES.mfe2 };
-      loadRemote(name, remotes[name], `${name}-root`);
+      const remotes = { mfe1: REMOTES.mfe1, mfe2: REMOTES.mfe2, mfe3: MFE3_SCRIPT };
+      const entry = name === 'mfe3' ? MFE3_SCRIPT : remotes[name];
+      loadRemote(name, entry, `${name}-root`);
     }
   }
 
