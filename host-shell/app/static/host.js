@@ -90,7 +90,7 @@ async function loadRemote(name, entryUrl, containerId) {
   if (!el) return;
 
   try {
-    const container = await import(/* @vite-ignore */ entryUrl);
+    const container = await import( entryUrl);
     if (typeof container.get !== 'function') {
       el.innerHTML = `<p class="slot-error">${name}: invalid remote (no get)</p>`;
       return;

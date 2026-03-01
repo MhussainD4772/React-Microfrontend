@@ -2,7 +2,6 @@
 Host Shell — FastAPI app. Serves HTML + static assets. CORS enabled for MFE dev servers.
 """
 from pathlib import Path
-
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
