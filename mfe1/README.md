@@ -1,6 +1,6 @@
 # MFE1 — Remote Micro-Frontend
 
-Phase 2: Independently runnable React + Vite remote using Module Federation (`@originjs/vite-plugin-federation`). Exposes a framework-agnostic **mount** / **unmount** contract.
+Independently runnable React + Vite remote using Module Federation (`@originjs/vite-plugin-federation`). Exposes a framework-agnostic **mount** / **unmount** contract.
 
 ## Install & Run
 
@@ -58,6 +58,7 @@ When `eventBus` is provided, the MFE emits **BULB_SET_REQUEST** (shared event co
 ## Remote Entry (for host)
 
 - **Development:** The Vite dev server does not serve `remoteEntry.js` (bundleless). To test host + remote together, build and use preview: `npm run build && npm run preview`; then point the host at e.g. `http://localhost:4173/remoteEntry.js`.
+
 - **Production / Preview:** After `npm run build`, `remoteEntry.js` is at `dist/assets/remoteEntry.js`. With `npm run preview`, use `http://localhost:4173/assets/remoteEntry.js`. For a deployed MFE1 origin, use `https://<mfe1-origin>/assets/remoteEntry.js` (or the root path your server uses for assets).
 
 ## Scripts

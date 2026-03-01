@@ -1,13 +1,16 @@
 # Host Shell
 
-FastAPI app that serves the Host UI and loads React MFEs (mfe1/mfe2) at runtime via Module Federation. **No Vite, no React** — the host is plain HTML + JS only.
+FastAPI app that serves the Host UI and loads React MFEs (mfe1/mfe2) at runtime via Module Federation. The host is plain HTML + JS only.
 
 - **Backend:** FastAPI serves `GET /` (index.html) and `/static/*` (host.js, styles.css). CORS is enabled for the MFE dev servers (5173, 5174).
+
 - **Frontend:** Plain HTML/CSS/JS (`app/templates/`, `app/static/`):
   - Host UI: bulb indicator and "Toggle Bulb (Host)" button.
   - Targets: checkboxes for host, mfe1, mfe2.
   - MFE slots: `#mfe1-root`, `#mfe2-root` where the remotes are mounted.
+
 - **Loading remotes:** `host.js` (ES module) dynamically imports each remote’s `remoteEntry.js` (e.g. `http://localhost:5173/remoteEntry.js`), then calls the exposed `mount(container, props)`.
+
 - **Mediator:** Shared state and event bus; MFEs receive `eventBus` in props and can emit/subscribe to BULB_SET_REQUEST, BULB_STATE_CHANGED, etc.
 
 ## Setup (one-time)
