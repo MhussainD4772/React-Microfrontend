@@ -15,8 +15,13 @@ type MFE2AppProps = {
   eventBus?: EventBus;
 };
 
-const TARGET_IDS = ["host", "mfe1", "mfe2"] as const;
-const TARGET_LABELS: Record<string, string> = { host: "Host", mfe1: "MFE1", mfe2: "MFE2" };
+const TARGET_IDS = ["host", "mfe1", "mfe2", "mfe3"] as const;
+const TARGET_LABELS: Record<string, string> = {
+  host: "Host",
+  mfe1: "MFE1",
+  mfe2: "MFE2",
+  mfe3: "MFE3",
+};
 
 function generateCorrelationId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -30,7 +35,9 @@ export default function MFE2App({
   eventBus,
 }: MFE2AppProps) {
   const [bulbOn, setBulbOn] = useState(initialBulbOn ?? false);
-  const [selectedTargets, setSelectedTargets] = useState<string[]>(initialTargets ?? ["mfe2"]);
+  const [selectedTargets, setSelectedTargets] = useState<string[]>(
+    initialTargets ?? ["mfe2"],
+  );
   const [pulseBulb, setPulseBulb] = useState(false);
   const prevBulbRef = useRef(initialBulbOn ?? false);
   const isStandalone = !eventBus;
@@ -59,7 +66,9 @@ export default function MFE2App({
 
   const handleTargetChange = useCallback((value: string, checked: boolean) => {
     setSelectedTargets((prev) =>
-      checked ? [...prev, value].filter((v, i, a) => a.indexOf(v) === i).sort() : prev.filter((v) => v !== value)
+      checked
+        ? [...prev, value].filter((v, i, a) => a.indexOf(v) === i).sort()
+        : prev.filter((v) => v !== value),
     );
   }, []);
 
@@ -80,7 +89,9 @@ export default function MFE2App({
   return (
     <div className="w-full flex justify-center p-3 min-h-[280px]">
       <div className="w-full max-w-md rounded-2xl border border-slate-200/80 bg-white/95 backdrop-blur shadow-xl shadow-slate-200/50 p-6 animate-fade-in-up hover:shadow-2xl hover:shadow-sky-100/50 hover:-translate-y-0.5 transition-all duration-300">
-        <h2 className="text-xs font-bold uppercase tracking-widest text-sky-600 mb-4">MFE2</h2>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-sky-600 mb-4">
+          MFE2
+        </h2>
         <div className="flex justify-center mb-5">
           <div
             className={`w-16 h-16 rounded-full border-4 transition-all duration-300 ${pulseBulb ? "animate-bulb-pulse" : ""} ${
@@ -115,7 +126,9 @@ export default function MFE2App({
                 className="sr-only peer"
               />
               <span className="mfe-toggle-track w-12 h-7 rounded-full bg-slate-200 flex-shrink-0 transition-colors" />
-              <span className="font-medium text-slate-700 group-hover:text-slate-900">{TARGET_LABELS[id]}</span>
+              <span className="font-medium text-slate-700 group-hover:text-slate-900">
+                {TARGET_LABELS[id]}
+              </span>
             </label>
           ))}
         </div>

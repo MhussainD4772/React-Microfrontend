@@ -80,12 +80,18 @@
           <span class="host-toggle__track"></span>
           <span class="host-toggle__label">MFE2</span>
         </label>
+        <label class="host-toggle">
+          <input type="checkbox" name="target" value="mfe3" />
+          <span class="host-toggle__track"></span>
+          <span class="host-toggle__label">MFE3</span>
+        </label>
       </div>
       <div class="mfe-open-row">
         <span class="targets-label">Open micro-frontends</span>
         <div class="mfe-open-buttons">
           <button type="button" class="btn-open-mfe" data-open="mfe1">Open MFE1</button>
           <button type="button" class="btn-open-mfe" data-open="mfe2">Open MFE2</button>
+          <button type="button" class="btn-open-mfe" data-open="mfe3">Open MFE3</button>
         </div>
       </div>
     </section>
@@ -115,6 +121,20 @@
       </div>
       <div class="modal__body">
         <div id="mfe2-root" class="mfe-slot">Loading MFE2…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: MFE3 -->
+  <div class="modal" id="modal-mfe3" role="dialog" aria-modal="true" aria-labelledby="modal-mfe3-title" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__box">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modal-mfe3-title">MFE3</h3>
+        <button type="button" class="modal__close" data-close="mfe3" aria-label="Close">×</button>
+      </div>
+      <div class="modal__body">
+        <div id="mfe3-root" class="mfe-slot">Loading MFE3…</div>
       </div>
     </div>
   </div>
